@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MIDI Recorder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            font-size: 20px;
+            padding: 10px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        #status {
+            margin-top: 20px;
+            font-size: 18px;
+            color: green;
+        }
+        .file-list {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+        }
+        .file-list a {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>MIDI Recorder</h1>
+    <button onclick="startRecording()">Start Recording</button>
+    <button onclick="stopRecording()">Stop Recording</button>
+    <p id="status"></p>
+
+    <h2>Recorded Files</h2>
+    <div class="file-list">
+        {% if files %}
+            {% for file in files %}
+                <a href="/download/{{ file }}">{{ file }}</a>
+            {% endfor %}
+        {% else %}
+            <p>No recordings yet.</p>
+        {% endif %}
+    </div>
+
+    <script>
+        function startRecording() {
+            fetch('/start', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => document.getElementById('status').innerText = data);
+        }
+
+        function stopRecording() {
+            fetch('/stop', { method: 'POST' })
+                .then(response => response.text())
+                .then(data => document.getElementById('status').innerText = data);
+        }
+    </script>
+</body>
+</html>
